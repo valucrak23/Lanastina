@@ -1,0 +1,79 @@
+DATOS DEL ESTUDIANTE
+====================
+
+Carrera: [Completar - ej: Diseño y Programación Web]
+Materia: Portales y Comercio Electrónico
+Cuatrimestre: [Completar - ej: 2]
+Año: 2025
+Turno: [Completar - ej: Noche]
+Comisión: [Completar]
+Apellido y Nombre: [Completar]
+Docente: Carlos Ferrer
+Carácter de entrega: 1er Parcial
+
+
+TEMA DEL PROYECTO
+==================
+Lanastina - Tienda de patrones de crochet
+
+CARACTERÍSTICAS DESTACADAS
+===========================
+- Logo personalizado en navbar y favicon
+- Diseño responsive mobile-first
+- Modo oscuro/claro con botón toggle (se guarda la preferencia)
+- Modal popup en blog con CTA de suscripción a tutoriales
+- HTML semántico y accesible
+- CSS personalizado con Bootstrap 5
+- Colores: Violeta (#9b59b6) y Turquesa (#3498db)
+- Fuente decorativa: Indie Flower
+- Transiciones suaves entre temas
+- Efectos hover y animaciones sutiles
+- JavaScript vanilla (sin dependencias externas)
+
+
+INSTRUCCIONES DE INSTALACIÓN
+=============================
+
+1. Iniciar Laragon (Start All)
+
+2. Crear base de datos MySQL llamada: lanastina
+
+3. Crear archivo .env en la raíz con esta configuración:
+   
+   APP_NAME=Lanastina
+   APP_ENV=local
+   APP_KEY=
+   APP_DEBUG=true
+   APP_URL=http://localhost
+   
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=lanastina
+   DB_USERNAME=root
+   DB_PASSWORD=
+   
+   SESSION_DRIVER=file
+   CACHE_DRIVER=file
+   QUEUE_CONNECTION=sync
+
+4. Ejecutar en terminal de Laragon:
+   php artisan key:generate
+   php artisan migrate
+   php artisan db:seed
+   
+   Esto creará las tablas y cargará datos de ejemplo:
+   - users (1 usuario administrador)
+   - patterns (6 patrones de crochet)
+   - blog_posts (5 artículos del blog)
+
+5. Acceder en navegador:
+   http://localhost/Lanastina/public
+   
+   Rutas:
+   - / (home) → Tienda de patrones
+   - /blog → Blog/Noticias
+   - /carrito → Carrito de compras
+   
+   Si la base está vacía, verás mensajes amigables invitando a volver pronto.
+
