@@ -23,13 +23,19 @@ Sitio web con tienda de patrones de crochet, incluye:
 - Bootstrap para estilos
 - Modo oscuro/claro 
 
+INSTALACION
 ===========
 
-1. Iniciar Laragon
+1. Clonar el repositorio de GitHub https://github.com/valucrak23/Lanastina.git
 
-2. Crear base de datos MySQL llamada: lanastina
+2. Iniciar Laragon
 
-3. Crear archivo .env en la raíz con esta configuración:
+3. Instalar dependencias de Composer (desde terminal en la carpeta del proyecto):
+   composer install
+
+4. Crear base de datos MySQL llamada: lanastina
+
+5. Crear archivo .env en la raíz con esta configuración:
    
    APP_NAME=Lanastina
    APP_ENV=local
@@ -44,7 +50,7 @@ Sitio web con tienda de patrones de crochet, incluye:
    DB_USERNAME=root
    DB_PASSWORD=
 
-4. Ejecutar en terminal de Laragon:
+6. Ejecutar en terminal de Laragon:
    php artisan key:generate
    php artisan migrate
    php artisan db:seed
@@ -54,13 +60,14 @@ Sitio web con tienda de patrones de crochet, incluye:
    - patterns (6 patrones de crochet)
    - blog_posts (5 artículos del blog)
 
-5. Acceder en navegador:
+7. Acceder en navegador:
    http://localhost/Lanastina/public
    
    Rutas:
    - / (home) → Tienda de patrones
    - /blog → Blog/Noticias
    - /carrito → Carrito de compras
-   
-   Si la base está vacía, verás mensajes amigables invitando a volver pronto.
+
+NOTA: La carpeta vendor/ no está incluida en el repositorio (gitignore).
+Se genera automáticamente al ejecutar composer install.
 
