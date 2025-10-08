@@ -7,14 +7,12 @@ use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
-    /**
-     * Muestra todas las entradas del blog
-     */
+    // muestra posts del blog ordenados por fecha
     public function index()
     {
         $posts = BlogPost::orderBy('published_at', 'desc')->get();
         
-        return view('blog', [
+        return view('blog.index', [
             'posts' => $posts
         ]);
     }

@@ -1,13 +1,10 @@
 DATOS DEL ESTUDIANTE
 ====================
 
-Carrera: [Completar - ej: Diseño y Programación Web]
+Carrera: Diseño y Programación Web
 Materia: Portales y Comercio Electrónico
-Cuatrimestre: [Completar - ej: 2]
-Año: 2025
-Turno: [Completar - ej: Noche]
-Comisión: [Completar]
-Apellido y Nombre: [Completar]
+2025 - DWM4AP
+Apellido y Nombre: Cruz Agostina, Ijelchuk Valentina
 Docente: Carlos Ferrer
 Carácter de entrega: 1er Parcial
 
@@ -16,25 +13,19 @@ TEMA DEL PROYECTO
 ==================
 Lanastina - Tienda de patrones de crochet
 
-CARACTERÍSTICAS DESTACADAS
-===========================
-- Logo personalizado en navbar y favicon
-- Diseño responsive mobile-first
-- Modo oscuro/claro con botón toggle (se guarda la preferencia)
-- Modal popup en blog con CTA de suscripción a tutoriales
-- HTML semántico y accesible
-- CSS personalizado con Bootstrap 5
-- Colores: Violeta (#9b59b6) y Turquesa (#3498db)
-- Fuente decorativa: Indie Flower
-- Transiciones suaves entre temas
-- Efectos hover y animaciones sutiles
-- JavaScript vanilla (sin dependencias externas)
+DESCRIPCION 
+===========
+Sitio web con tienda de patrones de crochet, incluye:
+- Home con catalogo de productos
+- Blog de noticias/tutoriales
+- Carrito de compras (visual)
+- Base de datos MySQL con 3 tablas (users, patterns, blog_posts)
+- Bootstrap para estilos
+- Modo oscuro/claro 
 
+===========
 
-INSTRUCCIONES DE INSTALACIÓN
-=============================
-
-1. Iniciar Laragon (Start All)
+1. Iniciar Laragon
 
 2. Crear base de datos MySQL llamada: lanastina
 
@@ -52,10 +43,6 @@ INSTRUCCIONES DE INSTALACIÓN
    DB_DATABASE=lanastina
    DB_USERNAME=root
    DB_PASSWORD=
-   
-   SESSION_DRIVER=file
-   CACHE_DRIVER=file
-   QUEUE_CONNECTION=sync
 
 4. Ejecutar en terminal de Laragon:
    php artisan key:generate

@@ -7,12 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class BlogPostSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Limpiar tabla antes de insertar
+        // borro todo primero
         DB::table('blog_posts')->truncate();
         
         DB::table('blog_posts')->insert([

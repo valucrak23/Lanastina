@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $title ?? 'Lanastina' }} :: Lanastina</title>
+    <title><?php echo e($title ?? 'Lanastina'); ?> :: Lanastina</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ url('img/logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ url('img/logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ url('img/logo.png') }}">
+    <link rel="icon" type="image/png" href="<?php echo e(url('img/logo.png')); ?>">
+    <link rel="shortcut icon" type="image/png" href="<?php echo e(url('img/logo.png')); ?>">
+    <link rel="apple-touch-icon" href="<?php echo e(url('img/logo.png')); ?>">
 
-    <link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/style.css') }}">
+    <link rel="stylesheet" href="<?php echo e(url('css/bootstrap.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(url('css/style.css')); ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
@@ -21,18 +21,39 @@
 
 <body>
     <div id="app">
-        <x-navbar />
+        <?php if (isset($component)) { $__componentOriginalb9eddf53444261b5c229e9d8b9f1298e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e = $attributes; } ?>
+<?php $component = App\View\Components\Navbar::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('navbar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Navbar::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e)): ?>
+<?php $attributes = $__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e; ?>
+<?php unset($__attributesOriginalb9eddf53444261b5c229e9d8b9f1298e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb9eddf53444261b5c229e9d8b9f1298e)): ?>
+<?php $component = $__componentOriginalb9eddf53444261b5c229e9d8b9f1298e; ?>
+<?php unset($__componentOriginalb9eddf53444261b5c229e9d8b9f1298e); ?>
+<?php endif; ?>
 
         <main class="main-content">
-            @if (session()->has('feedback.message'))
+            <?php if(session()->has('feedback.message')): ?>
                 <div class="container mt-3">
                     <div class="alert alert-success">
-                        {!! session()->get('feedback.message') !!}
+                        <?php echo session()->get('feedback.message'); ?>
+
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            {{ $slot }}
+            <?php echo e($slot); ?>
+
         </main>
 
         <footer class="footer-lanastina">
@@ -42,7 +63,7 @@
         </footer>
     </div>
 
-    <script src="{{ url('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="<?php echo e(url('js/bootstrap.bundle.min.js')); ?>"></script>
     
     <script>
         // tema claro/oscuro
@@ -69,7 +90,7 @@
             themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
         }
 
-        // modal del blog 
+        // modal del blog
         function openBlogModal(postId) {
             const modal = document.getElementById('blogModal');
             const modalBody = document.getElementById('modalBody');
@@ -121,3 +142,4 @@
 
 </html>
 
+<?php /**PATH C:\Users\valei\Downloads\laragon-portable\www\Lanastina\resources\views/components/layout.blade.php ENDPATH**/ ?>

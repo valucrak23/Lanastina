@@ -7,12 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 class PatternSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Limpiar tabla antes de insertar
+        // limpio la tabla antes de meter los datos 
         DB::table('patterns')->truncate();
         
         DB::table('patterns')->insert([
