@@ -67,7 +67,3 @@ INSTALACION
    - / (home) → Tienda de patrones
    - /blog → Blog/Noticias
    - /carrito → Carrito de compras
-
-NOTA: La carpeta vendor/ no está incluida en el repositorio (gitignore).
-Se genera automáticamente al ejecutar composer install.
-
