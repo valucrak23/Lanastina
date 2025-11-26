@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-lanastina">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}" aria-label="Ir a la página principal">
-            <img src="{{ url('img/logo.png') }}" alt="Lanastina Logo" class="brand-logo">
+        <a class="navbar-brand d-flex align-items-center" href="<?php echo e(route('home')); ?>" aria-label="Ir a la página principal">
+            <img src="<?php echo e(url('img/logo.png')); ?>" alt="Lanastina Logo" class="brand-logo">
             <span class="brand-name">Lanastina</span>
         </a>
         
@@ -18,46 +18,47 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" 
-                       href="{{ route('home') }}"
-                       aria-current="{{ request()->routeIs('home') ? 'page' : 'false' }}">
+                    <a class="nav-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>" 
+                       href="<?php echo e(route('home')); ?>"
+                       aria-current="<?php echo e(request()->routeIs('home') ? 'page' : 'false'); ?>">
                         Tienda
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}" 
-                       href="{{ route('blog') }}"
-                       aria-current="{{ request()->routeIs('blog') ? 'page' : 'false' }}">
+                    <a class="nav-link <?php echo e(request()->routeIs('blog') ? 'active' : ''); ?>" 
+                       href="<?php echo e(route('blog')); ?>"
+                       aria-current="<?php echo e(request()->routeIs('blog') ? 'page' : 'false'); ?>">
                         Blog
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('cart') ? 'active' : '' }}" 
-                       href="{{ route('cart') }}"
+                    <a class="nav-link <?php echo e(request()->routeIs('cart') ? 'active' : ''); ?>" 
+                       href="<?php echo e(route('cart')); ?>"
                        aria-label="Ver carrito de compras"
-                       aria-current="{{ request()->routeIs('cart') ? 'page' : 'false' }}">
+                       aria-current="<?php echo e(request()->routeIs('cart') ? 'page' : 'false'); ?>">
                         <span aria-hidden="true">🛒</span> 
                         <span>Carrito</span>
                     </a>
                 </li>
-                @auth
-                    @if(auth()->user()->isAdmin())
+                <?php if(auth()->guard()->check()): ?>
+                    <?php if(auth()->user()->isAdmin()): ?>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}" 
-                               href="{{ route('admin.dashboard') }}"
-                               aria-current="{{ request()->routeIs('admin.*') ? 'page' : 'false' }}">
+                            <a class="nav-link <?php echo e(request()->routeIs('admin.*') ? 'active' : ''); ?>" 
+                               href="<?php echo e(route('admin.dashboard')); ?>"
+                               aria-current="<?php echo e(request()->routeIs('admin.*') ? 'page' : 'false'); ?>">
                                 Panel Admin
                             </a>
                         </li>
-                    @endif
+                    <?php endif; ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ auth()->user()->name }}
+                            <?php echo e(auth()->user()->name); ?>
+
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
+                                <form method="POST" action="<?php echo e(route('logout')); ?>">
+                                    <?php echo csrf_field(); ?>
                                     <button type="submit" class="dropdown-item">
                                         Cerrar Sesión
                                     </button>
@@ -65,22 +66,22 @@
                             </li>
                         </ul>
                     </li>
-                @else
+                <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}" 
-                           href="{{ route('login') }}"
-                           aria-current="{{ request()->routeIs('login') ? 'page' : 'false' }}">
+                        <a class="nav-link <?php echo e(request()->routeIs('login') ? 'active' : ''); ?>" 
+                           href="<?php echo e(route('login')); ?>"
+                           aria-current="<?php echo e(request()->routeIs('login') ? 'page' : 'false'); ?>">
                             Iniciar Sesión
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('register') ? 'active' : '' }}" 
-                           href="{{ route('register') }}"
-                           aria-current="{{ request()->routeIs('register') ? 'page' : 'false' }}">
+                        <a class="nav-link <?php echo e(request()->routeIs('register') ? 'active' : ''); ?>" 
+                           href="<?php echo e(route('register')); ?>"
+                           aria-current="<?php echo e(request()->routeIs('register') ? 'page' : 'false'); ?>">
                             Registrarse
                         </a>
                     </li>
-                @endauth
+                <?php endif; ?>
                 <li class="nav-item d-flex align-items-center">
                     <button class="theme-toggle" 
                             id="themeToggle" 
@@ -94,3 +95,4 @@
     </div>
 </nav>
 
+<?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/components/navbar.blade.php ENDPATH**/ ?>

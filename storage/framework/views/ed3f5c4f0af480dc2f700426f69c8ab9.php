@@ -1,5 +1,14 @@
-<x-layout>
-    <x-slot:title>Blog</x-slot:title>
+<?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Blog <?php $__env->endSlot(); ?>
 
     <!-- Hero Section -->
     <section class="hero-section hero-blog">
@@ -20,51 +29,53 @@
     <section class="blog-posts-section">
         <div class="container">
             <div class="row g-4">
-                @forelse($posts as $post)
+                <?php $__empty_1 = true; $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <div class="col-md-4">
-                        <article class="blog-card blog-card-clickable" data-post-id="{{ $post->post_id }}">
-                            @if($post->image)
+                        <article class="blog-card blog-card-clickable" data-post-id="<?php echo e($post->post_id); ?>">
+                            <?php if($post->image): ?>
                                 <div class="blog-card-image">
-                                    <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid" style="max-height: 200px; width: 100%; object-fit: cover;">
+                                    <img src="<?php echo e(Storage::url($post->image)); ?>" alt="<?php echo e($post->title); ?>" class="img-fluid" style="max-height: 200px; width: 100%; object-fit: cover;">
                                 </div>
-                            @endif
+                            <?php endif; ?>
                     
                     <header class="blog-card-header">
-                        <h2 class="blog-card-title">{{ $post->title }}</h2>
-                        <p class="blog-card-subtitle">{{ $post->subtitle }}</p>
+                        <h2 class="blog-card-title"><?php echo e($post->title); ?></h2>
+                        <p class="blog-card-subtitle"><?php echo e($post->subtitle); ?></p>
                         <div class="blog-card-meta">
-                            Por {{ $post->user->name ?? $post->author }} • {{ $post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada' }}
+                            Por <?php echo e($post->user->name ?? $post->author); ?> • <?php echo e($post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada'); ?>
+
                         </div>
                     </header>
                     
                     <div class="blog-card-body">
                         <div class="blog-card-content blog-card-preview">
-                            {{ Str::limit($post->content, 200) }}
+                            <?php echo e(Str::limit($post->content, 200)); ?>
+
                         </div>
                         
-                        <span class="blog-category">{{ $post->category }}</span>
+                        <span class="blog-category"><?php echo e($post->category); ?></span>
                         
-                        <button class="btn-read-more" onclick="openBlogModal({{ $post->post_id }})">
+                        <button class="btn-read-more" onclick="openBlogModal(<?php echo e($post->post_id); ?>)">
                             Leer más →
                         </button>
                     </div>
                     
                     <!-- Contenido completo (oculto) -->
-                    <div class="blog-full-content" id="content-{{ $post->post_id }}" style="display: none;">
-                        @if($post->image)
+                    <div class="blog-full-content" id="content-<?php echo e($post->post_id); ?>" style="display: none;">
+                        <?php if($post->image): ?>
                             <div class="blog-full-image mb-4">
-                                <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid rounded">
+                                <img src="<?php echo e(Storage::url($post->image)); ?>" alt="<?php echo e($post->title); ?>" class="img-fluid rounded">
                             </div>
-                        @endif
-                        <h2>{{ $post->title }}</h2>
-                        <p class="subtitle">{{ $post->subtitle }}</p>
-                        <p class="meta">Por {{ $post->user->name ?? $post->author }} • {{ $post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada' }}</p>
-                        <div class="content">{{ $post->content }}</div>
-                        <span class="category">{{ $post->category }}</span>
+                        <?php endif; ?>
+                        <h2><?php echo e($post->title); ?></h2>
+                        <p class="subtitle"><?php echo e($post->subtitle); ?></p>
+                        <p class="meta">Por <?php echo e($post->user->name ?? $post->author); ?> • <?php echo e($post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada'); ?></p>
+                        <div class="content"><?php echo e($post->content); ?></div>
+                        <span class="category"><?php echo e($post->category); ?></span>
                     </div>
                 </article>
                     </div>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="empty-state text-center py-5">
                     <div class="empty-icon mb-3">📝✨</div>
                     <h3 class="mb-3">¡Estamos tejiendo nuevas historias!</h3>
@@ -73,7 +84,7 @@
                         Mantente atenta para no perderte nuestros artículos.
                     </p>
                 </div>
-                @endforelse
+                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -119,5 +130,15 @@
         </div>
     </div>
 
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $attributes = $__attributesOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__attributesOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
 
+<?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/blog/index.blade.php ENDPATH**/ ?>

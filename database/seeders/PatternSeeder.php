@@ -9,8 +9,14 @@ class PatternSeeder extends Seeder
 {
     public function run(): void
     {
+        // Deshabilitar temporalmente las verificaciones de foreign keys
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        
         // limpio la tabla antes de meter los datos 
         DB::table('patterns')->truncate();
+        
+        // Volver a habilitar las verificaciones de foreign keys
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         
         DB::table('patterns')->insert([
             [
