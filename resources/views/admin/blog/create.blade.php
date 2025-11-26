@@ -2,23 +2,29 @@
     <x-slot:title>Crear Nuevo Post</x-slot:title>
 
     <section class="container my-5">
-        <header class="mb-4">
+        <header class="admin-page-header mb-4">
             <a href="{{ route('admin.blog.index') }}" class="btn btn-outline-secondary mb-3">
                 ← Volver a Posts
             </a>
-            <h1>Crear Nuevo Post del Blog</h1>
+            <div class="d-flex align-items-center">
+                <div class="admin-page-icon me-3">✨</div>
+                <div>
+                    <h1 class="mb-1">Crear Nuevo Post del Blog</h1>
+                    <p class="text-muted mb-0">Completa el formulario para crear un nuevo post</p>
+                </div>
+            </div>
         </header>
 
-        <div class="card">
-            <div class="card-body">
+        <div class="admin-form-card">
+            <div class="admin-form-body">
                 @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                                showNotification('{{ $error }}', 'error');
                             @endforeach
-                        </ul>
-                    </div>
+                        });
+                    </script>
                 @endif
 
                 <form method="POST" action="{{ route('admin.blog.store') }}" enctype="multipart/form-data">
@@ -107,9 +113,9 @@
                         <small class="form-text text-muted">Si se deja vacío, se usará la fecha actual</small>
                     </div>
 
-                    <div class="d-flex gap-2">
+                    <div class="admin-form-footer">
                         <button type="submit" class="btn btn-primary">
-                            Crear Post
+                            ✨ Crear Post
                         </button>
                         <a href="{{ route('admin.blog.index') }}" class="btn btn-outline-secondary">
                             Cancelar

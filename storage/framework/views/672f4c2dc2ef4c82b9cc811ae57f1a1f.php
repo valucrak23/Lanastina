@@ -59,9 +59,9 @@
 
                                 </div>
                                 
-                                <a href="<?php echo e(route('cart')); ?>" class="btn-lanastina w-100 text-center">
+                                <button type="button" class="btn-lanastina w-100 text-center" onclick="addToCart(<?php echo e($pattern->pattern_id); ?>, this)">
                                     Agregar al Carrito
-                                </a>
+                                </button>
                             </div>
                         </article>
                     </div>
@@ -114,5 +114,49 @@
 <?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
 <?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
 <?php endif; ?>
+
+<script>
+    function addToCart(patternId, button) {
+        const originalText = button.textContent;
+        button.disabled = true;
+        button.textContent = 'Agregando...';
+        
+        fetch(`/carrito/agregar/${patternId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                updateCartCount(data.cart_count || 0);
+            } else {
+                showNotification(data.message, 'info');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error al agregar al carrito', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.textContent = originalText;
+        });
+    }
+    
+    function updateCartCount(count) {
+        const cartBadges = document.querySelectorAll('.cart-count');
+        cartBadges.forEach(badge => {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline' : 'none';
+        });
+    }
+</script>
 
 <?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/home.blade.php ENDPATH**/ ?>

@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Agrega la columna 'user_id' a la tabla blog_posts
+     * Crea foreign key hacia users.id
+     * onDelete('set null'): si se elimina el usuario, user_id se establece en null
      */
     public function up(): void
     {
@@ -17,7 +19,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Elimina la foreign key y la columna 'user_id' de blog_posts
      */
     public function down(): void
     {

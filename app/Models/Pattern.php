@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Modelo para los patrones de crochet
+ * Representa los productos de la tienda
  * 
  * @package App\Models
  */
@@ -15,6 +16,7 @@ class Pattern extends Model
 
     protected $primaryKey = 'pattern_id';
 
+    // Campos que pueden ser asignados masivamente
     protected $fillable = [
         'name',
         'description',

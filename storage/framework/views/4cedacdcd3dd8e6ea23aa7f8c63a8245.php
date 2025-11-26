@@ -30,10 +30,10 @@
                             <a href="<?php echo e(route('admin.blog.edit', $post->post_id)); ?>" class="btn btn-primary">
                                 Editar
                             </a>
-                            <form method="POST" action="<?php echo e(route('admin.blog.destroy', $post->post_id)); ?>" class="d-inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este post?');">
+                            <form method="POST" action="<?php echo e(route('admin.blog.destroy', $post->post_id)); ?>" class="d-inline delete-post-form">
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('DELETE'); ?>
-                                <button type="submit" class="btn btn-danger">
+                                <button type="button" class="btn btn-danger" onclick="handleDeletePost(this)">
                                     Eliminar
                                 </button>
                             </form>
@@ -107,5 +107,15 @@
 <?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
 <?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
 <?php endif; ?>
+
+<script>
+    function handleDeletePost(button) {
+        confirmAction('¿Estás seguro de que deseas eliminar este post?', function(confirmed) {
+            if (confirmed) {
+                button.closest('.delete-post-form').submit();
+            }
+        });
+    }
+</script>
 
 <?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/admin/blog/show.blade.php ENDPATH**/ ?>

@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Agrega la columna 'role' a la tabla users
+     * Define roles: 'user' (por defecto) y 'admin'
+     * Se inserta después de la columna 'password'
      */
     public function up(): void
     {
@@ -17,7 +19,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Elimina la columna 'role' de la tabla users
      */
     public function down(): void
     {

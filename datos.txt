@@ -15,27 +15,37 @@ Lanastina - Tienda de patrones de crochet
 
 DESCRIPCION 
 ===========
-Sitio web con tienda de patrones de crochet, incluye:
-- Home con catalogo de productos
-- Blog de noticias/tutoriales
-- Carrito de compras (visual)
-- Base de datos MySQL con 3 tablas (users, patterns, blog_posts)
-- Bootstrap para estilos
-- Modo oscuro/claro 
+Lanastina es una tienda online de patrones de crochet donde los usuarios pueden:
+- Explorar el catálogo completo de patrones disponibles
+- Leer artículos y tutoriales en el blog
+- Agregar patrones al carrito de compras
+- Registrarse y crear una cuenta
+- Los administradores tienen acceso a un panel completo para gestionar productos, blog y usuarios
+
+Tecnologías:
+- Laravel 11 (framework PHP)
+- MySQL (base de datos)
+- Bootstrap 5 (para los estilos base)
+- CSS personalizado con soporte para modo oscuro y claro
+- JavaScript para interacciones dinámicas (carrito, notificaciones)
 
 INSTALACION
 ===========
 
-1. Clonar el repositorio de GitHub https://github.com/valucrak23/Lanastina.git
+1. Clonar el repositorio desde GitHub:
+   https://github.com/valucrak23/Lanastina.git
 
-2. Iniciar Laragon
+2. Iniciar Laragon (o tu servidor web local)
 
-3. Instalar dependencias de Composer (desde terminal en la carpeta del proyecto):
+3. Instalar las dependencias de PHP:
+   Abrir una terminal en la carpeta del proyecto y ejecutar:
    composer install
 
-4. Crear base de datos MySQL llamada: lanastina
+4. Crear la base de datos:
+   Desde MySQL o HeidiSQL, crear una nueva base de datos con el nombre: lanastina
 
-5. Crear archivo .env en la raíz con esta configuración:
+5. Configurar el archivo .env:
+   En la raíz del proyecto, crear o editar el archivo .env con esta configuración:
    
    APP_NAME=Lanastina
    APP_ENV=local
@@ -50,20 +60,98 @@ INSTALACION
    DB_USERNAME=root
    DB_PASSWORD=
 
-6. Ejecutar en terminal de Laragon:
+6. Ejecutar los comandos de Laravel:
+   Desde la terminal de Laragon, navegar a la carpeta del proyecto y ejecutar:
+   
    php artisan key:generate
    php artisan migrate
    php artisan db:seed
+   php artisan storage:link
    
-   Esto creará las tablas y cargará datos de ejemplo:
-   - users (1 usuario administrador)
-   - patterns (6 patrones de crochet)
-   - blog_posts (5 artículos del blog)
+   Estos comandos van a:
+   - Crear todas las tablas necesarias en la base de datos
+   - Cargar datos de ejemplo (usuarios, patrones y posts del blog)
+   - Crear el enlace simbólico para que las imágenes se puedan ver
 
-7. Acceder en navegador:
+7. Acceder al sitio:
+   Abrir el navegador y ir a:
    http://localhost/Lanastina/public
    
-   Rutas:
-   - / (home) → Tienda de patrones
-   - /blog → Blog/Noticias
+   O si usas el servidor de desarrollo de Laravel:
+   http://127.0.0.1:8000
+   
+   Rutas principales del sitio:
+   - / → Página principal con el catálogo de patrones
+   - /blog → Sección del blog con artículos y tutoriales
    - /carrito → Carrito de compras
+   - /login → Página para iniciar sesión
+   - /register → Página para registrarse
+   - /admin/dashboard → Panel de administración (solo para usuarios admin)
+
+CREDENCIALES
+============
+
+Para probar el panel de administración:
+Email: admin@lanastina.com
+Password: password
+
+Para probar como usuario común:
+Email: usuario@lanastina.com
+Password: password
+
+FUNCIONALIDADES
+===============
+
+Panel de Administración:
+- Dashboard con estadísticas de usuarios, posts y patrones
+- ABM completo de patrones: crear nuevos, editar existentes, eliminar y ver detalles
+- ABM completo de posts del blog: crear, editar, eliminar y visualizar
+- Gestión de usuarios: listado completo y vista detallada de cada usuario
+- Subida y gestión de imágenes para productos y posts del blog
+- Interfaz moderna con diseño responsive
+
+Carrito de Compras:
+- Agregar patrones al carrito sin recargar la página (AJAX)
+- Visualizar todos los items agregados con sus detalles
+- Eliminar items individuales del carrito
+- Vaciar el carrito completo con confirmación
+- Cálculo automático del subtotal y total
+- Notificaciones visuales para todas las acciones
+
+Blog:
+- Visualización de posts en grid de 3 columnas
+- Cada post muestra título, subtítulo, imagen y contenido completo
+- Información del autor y fecha de publicación
+- Diseño responsive que se adapta a diferentes pantallas
+
+Tienda:
+- Catálogo completo de patrones con imágenes destacadas
+- Información detallada: precio, dificultad y categoría
+- Agregar al carrito directamente desde la página principal
+- Diseño atractivo con cards para cada patrón
+
+BASE DE DATOS
+=============
+
+Tablas principales:
+- users: Usuarios del sistema con roles (admin o user)
+- patterns: Patrones de crochet disponibles en la tienda
+- blog_posts: Artículos y posts del blog
+
+Relaciones:
+- blog_posts.user_id → users.id (cada post está asociado a un usuario/autor)
+
+Estructura de datos:
+- Los patrones se almacenan en la tabla patterns con toda su información
+- Los posts del blog incluyen relación con el usuario que los creó
+- Todos los datos se gestionan desde el panel de administración
+
+IMPORTANTE
+==========
+
+- Las imágenes que subes desde el admin se guardan en storage/app/public/
+- Estas carpetas NO están en el repositorio Git
+- Si mueves el proyecto, copia manualmente las carpetas:
+  * storage/app/public/pattern_images/
+  * storage/app/public/blog_images/
+- Ver archivo COMANDOS_TERMINAL.txt para más detalles

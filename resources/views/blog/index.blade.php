@@ -19,51 +19,42 @@
     <!-- Listado de Posts -->
     <section class="blog-posts-section">
         <div class="container">
-            <div class="row g-4">
+            <div class="blog-posts-grid">
                 @forelse($posts as $post)
-                    <div class="col-md-4">
-                        <article class="blog-card blog-card-clickable" data-post-id="{{ $post->post_id }}">
+                    <article class="blog-card-accordion">
+                        <div class="blog-card-header-accordion" onclick="toggleBlogAccordion({{ $post->post_id }})">
                             @if($post->image)
-                                <div class="blog-card-image">
-                                    <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid" style="max-height: 200px; width: 100%; object-fit: cover;">
+                                <div class="blog-card-image-small">
+                                    <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid">
                                 </div>
                             @endif
-                    
-                    <header class="blog-card-header">
-                        <h2 class="blog-card-title">{{ $post->title }}</h2>
-                        <p class="blog-card-subtitle">{{ $post->subtitle }}</p>
-                        <div class="blog-card-meta">
-                            Por {{ $post->user->name ?? $post->author }} • {{ $post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada' }}
-                        </div>
-                    </header>
-                    
-                    <div class="blog-card-body">
-                        <div class="blog-card-content blog-card-preview">
-                            {{ Str::limit($post->content, 200) }}
-                        </div>
-                        
-                        <span class="blog-category">{{ $post->category }}</span>
-                        
-                        <button class="btn-read-more" onclick="openBlogModal({{ $post->post_id }})">
-                            Leer más →
-                        </button>
-                    </div>
-                    
-                    <!-- Contenido completo (oculto) -->
-                    <div class="blog-full-content" id="content-{{ $post->post_id }}" style="display: none;">
-                        @if($post->image)
-                            <div class="blog-full-image mb-4">
-                                <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid rounded">
+                            <div class="blog-card-header-content">
+                                <h2 class="blog-card-title">{{ $post->title }}</h2>
+                                <p class="blog-card-subtitle">{{ $post->subtitle }}</p>
+                                <div class="blog-card-meta">
+                                    <span class="blog-author">Por {{ $post->user->name ?? $post->author }}</span>
+                                    <span class="blog-date">{{ $post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada' }}</span>
+                                    <span class="blog-category-badge">{{ $post->category }}</span>
+                                </div>
                             </div>
-                        @endif
-                        <h2>{{ $post->title }}</h2>
-                        <p class="subtitle">{{ $post->subtitle }}</p>
-                        <p class="meta">Por {{ $post->user->name ?? $post->author }} • {{ $post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada' }}</p>
-                        <div class="content">{{ $post->content }}</div>
-                        <span class="category">{{ $post->category }}</span>
-                    </div>
-                </article>
-                    </div>
+                            <button class="blog-accordion-toggle" id="toggle-{{ $post->post_id }}">
+                                <span class="toggle-icon">▼</span>
+                            </button>
+                        </div>
+                        
+                        <div class="blog-card-body-accordion" id="content-{{ $post->post_id }}">
+                            <div class="blog-card-expanded-content">
+                                @if($post->image)
+                                    <div class="blog-expanded-image mb-4">
+                                        <img src="{{ Storage::url($post->image) }}" alt="{{ $post->title }}" class="img-fluid rounded">
+                                    </div>
+                                @endif
+                                <div class="blog-full-content">
+                                    <p class="blog-content-text">{{ $post->content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
                 @empty
                 <div class="empty-state text-center py-5">
                     <div class="empty-icon mb-3">📝✨</div>
@@ -78,46 +69,21 @@
         </div>
     </section>
 
-    <!-- Modal de Blog -->
-    <div id="blogModal" class="blog-modal">
-        <div class="blog-modal-content">
-            <button class="blog-modal-close" onclick="closeBlogModal()">&times;</button>
-            
-            <div class="blog-modal-body" id="modalBody">
-                <!-- Contenido dinámico -->
-            </div>
-            
-            <!-- CTA Section -->
-            <div class="blog-modal-cta">
-                <div class="cta-content">
-                    <div class="cta-icon">🎓✨</div>
-                    <h3>¡Comienza tu viaje en el crochet!</h3>
-                    <p class="cta-subtitle">Accede GRATIS a nuestros tutoriales iniciales</p>
-                    
-                    <div class="cta-benefits">
-                        <div class="benefit-item">
-                            <span class="benefit-icon">📹</span>
-                            <span>Video tutoriales paso a paso</span>
-                        </div>
-                        <div class="benefit-item">
-                            <span class="benefit-icon">📝</span>
-                            <span>Guía PDF de puntos básicos</span>
-                        </div>
-                        <div class="benefit-item">
-                            <span class="benefit-icon">🧶</span>
-                            <span>Primer patrón gratuito</span>
-                        </div>
-                    </div>
-                    
-                    <form class="cta-form" onsubmit="event.preventDefault(); subscribeCTA();">
-                        <input type="email" placeholder="Ingresa tu email" required class="cta-input">
-                        <button type="submit" class="cta-button">Acceder a Tutoriales Gratis</button>
-                    </form>
-                    <p class="cta-note">✨ Únete a nuestra comunidad de tejedoras • Sin spam, solo inspiración</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </x-layout>
+
+<script>
+    function toggleBlogAccordion(postId) {
+        const content = document.getElementById('content-' + postId);
+        const toggle = document.getElementById('toggle-' + postId);
+        const icon = toggle.querySelector('.toggle-icon');
+        
+        if (content.classList.contains('expanded')) {
+            content.classList.remove('expanded');
+            icon.textContent = '▼';
+        } else {
+            content.classList.add('expanded');
+            icon.textContent = '▲';
+        }
+    }
+</script>
 

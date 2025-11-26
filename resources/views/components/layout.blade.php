@@ -24,34 +24,23 @@
         <x-navbar />
 
         <main class="main-content">
-            @if (session()->has('success'))
-                <div class="container mt-3">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                    </div>
-                </div>
-            @endif
-
-            @if (session()->has('error'))
-                <div class="container mt-3">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                    </div>
-                </div>
-            @endif
-
-            @if (session()->has('feedback.message'))
-                <div class="container mt-3">
-                    <div class="alert alert-success">
-                        {!! session()->get('feedback.message') !!}
-                    </div>
-                </div>
-            @endif
-
             {{ $slot }}
         </main>
+
+        <!-- Contenedor de notificaciones -->
+        <div id="notifications-container"></div>
+
+        <!-- Modal de confirmación -->
+        <div id="confirm-modal" class="confirm-modal">
+            <div class="confirm-modal-content">
+                <h3 class="confirm-modal-title">Confirmar</h3>
+                <p class="confirm-modal-message" id="confirm-modal-message"></p>
+                <div class="confirm-modal-buttons">
+                    <button class="confirm-btn confirm-btn-accept" id="confirm-btn-accept">Aceptar</button>
+                    <button class="confirm-btn confirm-btn-cancel" id="confirm-btn-cancel">Cancelar</button>
+                </div>
+            </div>
+        </div>
 
         <footer class="footer-lanastina">
             <div class="container text-center">
@@ -87,53 +76,132 @@
             themeIcon.textContent = theme === 'light' ? '🌙' : '☀️';
         }
 
-        // modal del blog 
-        function openBlogModal(postId) {
-            const modal = document.getElementById('blogModal');
-            const modalBody = document.getElementById('modalBody');
-            const contentElement = document.getElementById('content-' + postId);
-            
-            if (contentElement && modal && modalBody) {
-                modalBody.innerHTML = contentElement.innerHTML;
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-        }
 
-        function closeBlogModal() {
-            const modal = document.getElementById('blogModal');
-            if (modal) {
+        // Sistema de notificaciones
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notifications-container');
+            if (!container) return;
+            
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            // Convertir saltos de línea a <br>
+            const messageWithBreaks = String(message).replace(/\n/g, '<br>');
+            
+            const messageSpan = document.createElement('span');
+            messageSpan.className = 'notification-message';
+            messageSpan.innerHTML = messageWithBreaks;
+            
+            const closeButton = document.createElement('button');
+            closeButton.className = 'notification-close';
+            closeButton.textContent = '×';
+            closeButton.onclick = function() {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            };
+            
+            const content = document.createElement('div');
+            content.className = 'notification-content';
+            content.appendChild(messageSpan);
+            content.appendChild(closeButton);
+            
+            notification.appendChild(content);
+            container.appendChild(notification);
+            
+            // Animación de entrada
+            requestAnimationFrame(() => {
+                notification.classList.add('show');
+            });
+            
+            // Auto-eliminar después de 5 segundos
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+        
+        // Hacer la función disponible globalmente
+        window.showNotification = showNotification;
+
+        // Sistema de confirmación personalizado
+        function confirmAction(message, callback) {
+            const modal = document.getElementById('confirm-modal');
+            const messageEl = document.getElementById('confirm-modal-message');
+            const acceptBtn = document.getElementById('confirm-btn-accept');
+            const cancelBtn = document.getElementById('confirm-btn-cancel');
+            
+            messageEl.textContent = message;
+            modal.classList.add('show');
+            
+            const handleAccept = () => {
                 modal.classList.remove('show');
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        // cierra al hacer click afuera
-        window.onclick = function(event) {
-            const modal = document.getElementById('blogModal');
-            if (event.target === modal) {
-                closeBlogModal();
-            }
-        }
-
-        // cierra con escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeBlogModal();
-            }
-        });
-
-        // suscripcion
-        function subscribeCTA() {
-            const emailInput = document.querySelector('.cta-input');
-            const email = emailInput.value;
+                acceptBtn.removeEventListener('click', handleAccept);
+                cancelBtn.removeEventListener('click', handleCancel);
+                if (callback) callback(true);
+            };
             
-            if (email) {
-                alert('¡Gracias por suscribirte! 🎉\n\nRevisá tu email para acceder a los tutoriales gratuitos.\n\n' + email);
-                emailInput.value = '';
-                closeBlogModal();
-            }
+            const handleCancel = () => {
+                modal.classList.remove('show');
+                acceptBtn.removeEventListener('click', handleAccept);
+                cancelBtn.removeEventListener('click', handleCancel);
+                if (callback) callback(false);
+            };
+            
+            acceptBtn.addEventListener('click', handleAccept);
+            cancelBtn.addEventListener('click', handleCancel);
         }
+        
+        window.confirmAction = confirmAction;
+
+        // Mostrar notificaciones desde sesión (solo una vez al cargar)
+        (function() {
+            let notificationsShown = false;
+            
+            function showSessionNotifications() {
+                if (notificationsShown) return;
+                notificationsShown = true;
+                
+                @if (session()->has('success'))
+                    setTimeout(function() {
+                        showNotification({!! json_encode(session('success')) !!}, 'success');
+                    }, 300);
+                @endif
+
+                @if (session()->has('error'))
+                    setTimeout(function() {
+                        showNotification({!! json_encode(session('error')) !!}, 'error');
+                    }, 300);
+                @endif
+
+                @if (session()->has('info'))
+                    setTimeout(function() {
+                        showNotification({!! json_encode(session('info')) !!}, 'info');
+                    }, 300);
+                @endif
+
+                @if (session()->has('feedback.message'))
+                    setTimeout(function() {
+                        showNotification({!! json_encode(session()->get('feedback.message')) !!}, 'success');
+                    }, 300);
+                @endif
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', showSessionNotifications);
+            } else {
+                showSessionNotifications();
+            }
+        })();
     </script>
 </body>
 

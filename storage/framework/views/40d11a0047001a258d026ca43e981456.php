@@ -38,6 +38,14 @@
                        aria-current="<?php echo e(request()->routeIs('cart') ? 'page' : 'false'); ?>">
                         <span aria-hidden="true">🛒</span> 
                         <span>Carrito</span>
+                        <?php
+                            $cartCount = count(session()->get('cart', []));
+                        ?>
+                        <?php if($cartCount > 0): ?>
+                            <span class="cart-count badge bg-primary ms-1"><?php echo e($cartCount); ?></span>
+                        <?php else: ?>
+                            <span class="cart-count badge bg-primary ms-1" style="display: none;">0</span>
+                        <?php endif; ?>
                     </a>
                 </li>
                 <?php if(auth()->guard()->check()): ?>

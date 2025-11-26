@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controllers\Middleware;
 
+/**
+ * Controlador base para todos los controladores de la aplicación
+ * Define el método middleware() para Laravel 11
+ * Los controladores hijos pueden sobrescribir este método para aplicar middleware
+ */
 abstract class Controller
 {
     /**
-     * Get the middleware that should be assigned to the controller.
+     * Retorna el middleware que debe aplicarse al controlador
+     * Por defecto retorna array vacío, los controladores hijos lo sobrescriben
      *
-     * @return array<int, \Illuminate\Routing\Controllers\Middleware|\Closure|string>
+     * @return array
      */
     public static function middleware()
     {

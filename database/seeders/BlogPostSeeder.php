@@ -5,19 +5,28 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Seeder para poblar la tabla blog_posts con datos de ejemplo
+ * Inserta 5 posts del blog con diferentes categorías y fechas de publicación
+ */
 class BlogPostSeeder extends Seeder
 {
+    /**
+     * Ejecuta el seeder
+     * Deshabilita foreign keys, limpia la tabla, inserta datos y reactiva foreign keys
+     */
     public function run(): void
     {
-        // Deshabilitar temporalmente las verificaciones de foreign keys
+        // Deshabilita foreign keys para evitar errores al truncar
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
-        // borro todo primero
+        // Limpia la tabla antes de insertar nuevos datos
         DB::table('blog_posts')->truncate();
         
-        // Volver a habilitar las verificaciones de foreign keys
+        // Reactiva las verificaciones de foreign keys
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         
+        // Inserta los posts de ejemplo
         DB::table('blog_posts')->insert([
             [
                 'user_id' => 1,

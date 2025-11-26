@@ -38,6 +38,14 @@
                        aria-current="{{ request()->routeIs('cart') ? 'page' : 'false' }}">
                         <span aria-hidden="true">🛒</span> 
                         <span>Carrito</span>
+                        @php
+                            $cartCount = count(session()->get('cart', []));
+                        @endphp
+                        @if($cartCount > 0)
+                            <span class="cart-count badge bg-primary ms-1">{{ $cartCount }}</span>
+                        @else
+                            <span class="cart-count badge bg-primary ms-1" style="display: none;">0</span>
+                        @endif
                     </a>
                 </li>
                 @auth

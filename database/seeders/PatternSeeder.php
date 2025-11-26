@@ -5,19 +5,28 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Seeder para poblar la tabla patterns con datos de ejemplo
+ * Inserta 6 patrones de crochet con diferentes categorías y dificultades
+ */
 class PatternSeeder extends Seeder
 {
+    /**
+     * Ejecuta el seeder
+     * Deshabilita foreign keys, limpia la tabla, inserta datos y reactiva foreign keys
+     */
     public function run(): void
     {
-        // Deshabilitar temporalmente las verificaciones de foreign keys
+        // Deshabilita foreign keys para evitar errores al truncar
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         
-        // limpio la tabla antes de meter los datos 
+        // Limpia la tabla antes de insertar nuevos datos
         DB::table('patterns')->truncate();
         
-        // Volver a habilitar las verificaciones de foreign keys
+        // Reactiva las verificaciones de foreign keys
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         
+        // Inserta los patrones de ejemplo
         DB::table('patterns')->insert([
             [
                 'name' => 'Amigurumi Conejito',

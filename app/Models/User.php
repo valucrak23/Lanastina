@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Modelo para los usuarios del sistema
+ * Extiende Authenticatable para autenticación Laravel
+ * Relación HasMany con BlogPost
  * 
  * @package App\Models
  */
@@ -15,6 +17,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    // Campos que pueden ser asignados masivamente
     protected $fillable = [
         'name',
         'email',
@@ -22,11 +25,13 @@ class User extends Authenticatable
         'role',
     ];
 
+    // Campos ocultos en serialización (JSON)
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    // Casts para tipos de datos
     protected function casts(): array
     {
         return [
@@ -36,7 +41,8 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación con los posts del blog creados por el usuario
+     * Relación HasMany con BlogPost
+     * Un usuario puede tener muchos posts del blog
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -46,7 +52,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Verifica si el usuario es administrador
+     * Verifica si el usuario tiene rol de administrador
      *
      * @return bool
      */

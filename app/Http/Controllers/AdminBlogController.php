@@ -8,15 +8,18 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * Controlador para el ABM de blog posts en el panel de administración
+ * CRUD completo: crear, leer, actualizar y eliminar posts del blog
+ * Incluye validación, manejo de imágenes y asignación de autor
  * 
  * @package App\Http\Controllers
  */
 class AdminBlogController extends Controller
 {
     /**
-     * Get the middleware that should be assigned to the controller.
+     * Middleware de autenticación y autorización admin
+     * Protege todas las rutas del controlador
      *
-     * @return array<int, \Illuminate\Routing\Controllers\Middleware|\Closure|string>
+     * @return array
      */
     public static function middleware()
     {
@@ -93,17 +96,17 @@ class AdminBlogController extends Controller
             'published_at.date' => 'La fecha de publicación debe ser una fecha válida.',
         ]);
 
-        // Manejo de la imagen
+        // Procesa y almacena la imagen en storage/app/public/blog_images
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('blog_images', 'public');
             $validated['image'] = $imagePath;
         }
 
-        // Asignar el usuario autenticado como autor
+        // Asigna el usuario autenticado como autor del post
         $validated['user_id'] = auth()->id();
         $validated['author'] = auth()->user()->name;
 
-        // Si no se proporciona fecha de publicación, usar la actual
+        // Si no se proporciona fecha, usa la fecha actual
         if (!isset($validated['published_at'])) {
             $validated['published_at'] = now();
         }
@@ -111,7 +114,7 @@ class AdminBlogController extends Controller
         BlogPost::create($validated);
 
         return redirect()->route('admin.blog.index')
-            ->with('success', 'Post creado exitosamente.');
+            ->with('success', 'Post creado');
     }
 
     /**
@@ -161,9 +164,8 @@ class AdminBlogController extends Controller
             'published_at.date' => 'La fecha de publicación debe ser una fecha válida.',
         ]);
 
-        // Manejo de la imagen
+        // Procesa nueva imagen: elimina la anterior y guarda la nueva
         if ($request->hasFile('image')) {
-            // Eliminar imagen anterior si existe
             if ($post->image && Storage::disk('public')->exists($post->image)) {
                 Storage::disk('public')->delete($post->image);
             }
@@ -175,7 +177,7 @@ class AdminBlogController extends Controller
         $post->update($validated);
 
         return redirect()->route('admin.blog.index')
-            ->with('success', 'Post actualizado exitosamente.');
+            ->with('success', 'Post actualizado');
     }
 
     /**
@@ -188,7 +190,7 @@ class AdminBlogController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        // Eliminar imagen si existe
+        // Elimina la imagen del storage antes de borrar el registro
         if ($post->image && Storage::disk('public')->exists($post->image)) {
             Storage::disk('public')->delete($post->image);
         }
@@ -196,7 +198,7 @@ class AdminBlogController extends Controller
         $post->delete();
 
         return redirect()->route('admin.blog.index')
-            ->with('success', 'Post eliminado exitosamente.');
+            ->with('success', 'Post eliminado');
     }
 }
 

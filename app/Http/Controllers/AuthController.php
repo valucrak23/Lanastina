@@ -10,6 +10,7 @@ use Illuminate\Validation\Rules\Password;
 
 /**
  * Controlador para manejar la autenticación de usuarios
+ * Gestiona login, registro y logout
  * 
  * @package App\Http\Controllers
  */
@@ -27,6 +28,8 @@ class AuthController extends Controller
 
     /**
      * Procesa el inicio de sesión
+     * Valida credenciales, autentica con Auth::attempt
+     * Regenera la sesión por seguridad
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -66,6 +69,8 @@ class AuthController extends Controller
 
     /**
      * Procesa el registro de un nuevo usuario
+     * Valida datos, hashea la contraseña, crea usuario con rol 'user'
+     * Autentica automáticamente al usuario recién registrado
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -86,6 +91,7 @@ class AuthController extends Controller
             'password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
+        // Crea el usuario con contraseña hasheada y rol por defecto 'user'
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -93,14 +99,16 @@ class AuthController extends Controller
             'role' => 'user',
         ]);
 
+        // Autentica automáticamente al usuario recién registrado
         Auth::login($user);
 
         return redirect()->route('home')
-            ->with('success', '¡Cuenta creada exitosamente! Bienvenido a Lanastina.');
+            ->with('success', '¡Cuenta creada! Bienvenido a Lanastina');
     }
 
     /**
      * Cierra la sesión del usuario
+     * Invalida la sesión y regenera el token CSRF por seguridad
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -109,11 +117,12 @@ class AuthController extends Controller
     {
         Auth::logout();
 
+        // Invalida la sesión y regenera el token CSRF
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect()->route('home')
-            ->with('success', 'Sesión cerrada correctamente.');
+            ->with('success', 'Sesión cerrada');
     }
 }
 

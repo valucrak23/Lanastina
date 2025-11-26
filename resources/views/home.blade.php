@@ -48,9 +48,9 @@
                                     ${{ number_format($pattern->price, 2) }}
                                 </div>
                                 
-                                <a href="{{ route('cart') }}" class="btn-lanastina w-100 text-center">
+                                <button type="button" class="btn-lanastina w-100 text-center" onclick="addToCart({{ $pattern->pattern_id }}, this)">
                                     Agregar al Carrito
-                                </a>
+                                </button>
                             </div>
                         </article>
                     </div>
@@ -94,4 +94,48 @@
     </section>
 
 </x-layout>
+
+<script>
+    function addToCart(patternId, button) {
+        const originalText = button.textContent;
+        button.disabled = true;
+        button.textContent = 'Agregando...';
+        
+        fetch(`/carrito/agregar/${patternId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                updateCartCount(data.cart_count || 0);
+            } else {
+                showNotification(data.message, 'info');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Error al agregar al carrito', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.textContent = originalText;
+        });
+    }
+    
+    function updateCartCount(count) {
+        const cartBadges = document.querySelectorAll('.cart-count');
+        cartBadges.forEach(badge => {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'inline' : 'none';
+        });
+    }
+</script>
 

@@ -9,13 +9,13 @@
                         <h2 class="card-title text-center mb-4">Crear Cuenta</h2>
 
                         @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
                                     @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                                        showNotification('{{ $error }}', 'error');
                                     @endforeach
-                                </ul>
-                            </div>
+                                });
+                            </script>
                         @endif
 
                         <form method="POST" action="{{ route('register') }}">

@@ -18,13 +18,13 @@
                         <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
 
                         <?php if($errors->any()): ?>
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
                                     <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <li><?php echo e($error); ?></li>
+                                        showNotification('<?php echo e($error); ?>', 'error');
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </ul>
-                            </div>
+                                });
+                            </script>
                         <?php endif; ?>
 
                         <form method="POST" action="<?php echo e(route('login')); ?>">

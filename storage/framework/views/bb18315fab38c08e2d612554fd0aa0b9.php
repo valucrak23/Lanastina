@@ -8,77 +8,82 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-     <?php $__env->slot('title', null, []); ?> Gestión de Blog <?php $__env->endSlot(); ?>
+     <?php $__env->slot('title', null, []); ?> Gestión de Patrones <?php $__env->endSlot(); ?>
 
     <section class="container my-5">
         <header class="admin-page-header mb-4">
             <div class="d-flex align-items-center mb-3">
-                <div class="admin-page-icon me-3">📝</div>
+                <div class="admin-page-icon me-3">🧶</div>
                 <div>
-                    <h1 class="mb-1">Gestión de Posts del Blog</h1>
-                    <p class="text-muted mb-0">Administra las entradas del blog</p>
+                    <h1 class="mb-1">Gestión de Patrones</h1>
+                    <p class="text-muted mb-0">Administra los patrones de crochet</p>
                 </div>
             </div>
             <div class="admin-page-actions">
                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="btn btn-outline-secondary me-2">
                     ← Dashboard
                 </a>
-                <a href="<?php echo e(route('admin.blog.create')); ?>" class="btn btn-primary">
-                    ✨ Nuevo Post
+                <a href="<?php echo e(route('admin.patterns.create')); ?>" class="btn btn-primary">
+                    ✨ Nuevo Patrón
                 </a>
             </div>
         </header>
 
         <div class="admin-table-card">
             <div class="admin-table-header">
-                <h5 class="mb-0">Listado de Posts (<?php echo e($posts->count()); ?>)</h5>
+                <h5 class="mb-0">Listado de Patrones (<?php echo e($patterns->count()); ?>)</h5>
             </div>
             <div class="admin-table-body">
-                <?php if($posts->count() > 0): ?>
+                <?php if($patterns->count() > 0): ?>
                     <div class="table-responsive">
                         <table class="table admin-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Imagen</th>
-                                    <th>Título</th>
+                                    <th>Nombre</th>
                                     <th>Categoría</th>
-                                    <th>Autor</th>
-                                    <th>Fecha</th>
+                                    <th>Dificultad</th>
+                                    <th>Precio</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $patterns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pattern): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td><span class="admin-table-id">#<?php echo e($post->post_id); ?></span></td>
+                                        <td><span class="admin-table-id">#<?php echo e($pattern->pattern_id); ?></span></td>
                                         <td>
-                                            <?php if($post->image): ?>
-                                                <?php if(str_starts_with($post->image, 'blog_images/')): ?>
-                                                    <img src="<?php echo e(Storage::url($post->image)); ?>" alt="<?php echo e($post->title); ?>" class="admin-table-img">
+                                            <?php if($pattern->image): ?>
+                                                <?php if(str_starts_with($pattern->image, 'pattern_images/')): ?>
+                                                    <img src="<?php echo e(Storage::url($pattern->image)); ?>" alt="<?php echo e($pattern->name); ?>" class="admin-table-img">
                                                 <?php else: ?>
-                                                    <img src="<?php echo e(url($post->image)); ?>" alt="<?php echo e($post->title); ?>" class="admin-table-img">
+                                                    <img src="<?php echo e(url($pattern->image)); ?>" alt="<?php echo e($pattern->name); ?>" class="admin-table-img">
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <span class="admin-table-no-img">📷</span>
                                             <?php endif; ?>
                                         </td>
-                                        <td><strong><?php echo e($post->title); ?></strong></td>
-                                        <td><span class="admin-badge admin-badge-category"><?php echo e($post->category); ?></span></td>
-                                        <td><?php echo e($post->user->name ?? $post->author); ?></td>
-                                        <td><small class="text-muted"><?php echo e($post->published_at ? $post->published_at->format('d/m/Y') : 'No publicada'); ?></small></td>
+                                        <td><strong><?php echo e($pattern->name); ?></strong></td>
+                                        <td><span class="admin-badge admin-badge-category"><?php echo e($pattern->category); ?></span></td>
+                                        <td>
+                                            <span class="admin-badge admin-badge-difficulty admin-badge-<?php echo e(strtolower($pattern->difficulty)); ?>">
+                                                <?php echo e($pattern->difficulty); ?>
+
+                                            </span>
+                                        </td>
+                                        <td><strong class="admin-price">$<?php echo e(number_format($pattern->price, 2)); ?></strong></td>
                                         <td>
                                             <div class="admin-action-buttons">
-                                                <a href="<?php echo e(route('admin.blog.show', $post->post_id)); ?>" class="admin-action-btn admin-action-view" title="Ver">
+                                                <a href="<?php echo e(route('admin.patterns.show', $pattern->pattern_id)); ?>" class="admin-action-btn admin-action-view" title="Ver">
                                                     👁️
                                                 </a>
-                                                <a href="<?php echo e(route('admin.blog.edit', $post->post_id)); ?>" class="admin-action-btn admin-action-edit" title="Editar">
+                                                <a href="<?php echo e(route('admin.patterns.edit', $pattern->pattern_id)); ?>" class="admin-action-btn admin-action-edit" title="Editar">
                                                     ✏️
                                                 </a>
-                                                <form method="POST" action="<?php echo e(route('admin.blog.destroy', $post->post_id)); ?>" class="d-inline delete-post-form">
+                                                <form method="POST" action="<?php echo e(route('admin.patterns.destroy', $pattern->pattern_id)); ?>" class="d-inline delete-pattern-form">
                                                     <?php echo csrf_field(); ?>
                                                     <?php echo method_field('DELETE'); ?>
-                                                    <button type="button" class="admin-action-btn admin-action-delete" onclick="handleDeletePost(this)" title="Eliminar">
+                                                    <button type="button" class="admin-action-btn admin-action-delete" onclick="handleDeletePattern(this)" title="Eliminar">
                                                         🗑️
                                                     </button>
                                                 </form>
@@ -91,15 +96,15 @@
                     </div>
 
                     <div class="admin-pagination">
-                        <?php echo e($posts->links()); ?>
+                        <?php echo e($patterns->links()); ?>
 
                     </div>
                 <?php else: ?>
                     <div class="admin-empty-state-large">
-                        <div class="admin-empty-icon-large">📝</div>
-                        <h4>No hay posts del blog aún</h4>
-                        <p class="text-muted">Comienza creando tu primer post</p>
-                        <a href="<?php echo e(route('admin.blog.create')); ?>" class="btn btn-primary">
+                        <div class="admin-empty-icon-large">🧶</div>
+                        <h4>No hay patrones aún</h4>
+                        <p class="text-muted">Comienza creando tu primer patrón</p>
+                        <a href="<?php echo e(route('admin.patterns.create')); ?>" class="btn btn-primary">
                             ✨ Crear el primero
                         </a>
                     </div>
@@ -119,13 +124,13 @@
 <?php endif; ?>
 
 <script>
-    function handleDeletePost(button) {
-        confirmAction('¿Estás seguro de que deseas eliminar este post?', function(confirmed) {
+    function handleDeletePattern(button) {
+        confirmAction('¿Estás seguro de que deseas eliminar este patrón?', function(confirmed) {
             if (confirmed) {
-                button.closest('.delete-post-form').submit();
+                button.closest('.delete-pattern-form').submit();
             }
         });
     }
 </script>
 
-<?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/admin/blog/index.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\PARCIAL2-Ijelchuk-Cruz\Lanastina\resources\views/admin/patterns/index.blade.php ENDPATH**/ ?>
